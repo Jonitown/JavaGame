@@ -2,9 +2,11 @@ package de.jonitown;
 
 import de.jonitown.grafik.Render;
 import de.jonitown.grafik.Screen;
+import de.jonitown.input.InputHandler;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -15,17 +17,23 @@ public class Display extends Canvas implements Runnable {
 
     private Thread thread;
     private boolean running = false;
-    private Render render;
     private Screen screen;
     private Game game;
     private BufferedImage img;
     private int[] pixels;
+    private InputHandler input;
 
     public Display() {
         screen = new Screen(WIDTH, HEIGHT);
         game = new Game();
         img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         pixels = ( (DataBufferInt) img.getRaster().getDataBuffer()).getData();
+
+        input = new InputHandler();
+        addKeyListener(input);
+        addFocusListener(input);
+        addMouseListener(input);
+        addMouseMotionListener(input);
     }
 
     public void start() {
@@ -55,7 +63,7 @@ public class Display extends Canvas implements Runnable {
         }
     }
     private void tick() {
-        game.tick();
+        game.tick(input.keys);
     }
     private void render() {
         BufferStrategy bs = this.getBufferStrategy();

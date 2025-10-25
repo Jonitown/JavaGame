@@ -23,14 +23,8 @@ public class Screen extends Render {
         for (int i = 0; i<width*height; i++) {
             pixels[i] = 0;
         }
-
-        for (int i = 0; i < 100; i++) {
-
-            int anim =(int) (Math.sin((game.time+i*2)%1000.0/100)*100);
-            int anim2 = (int) (Math.cos((game.time+i*2)%1000.0/100)*100);
-
-        }
-    render.floor(game);
+        render.floor(game);
+        render.renderDistanceLimiter();
         draw(render,0,0);
     }
 }
